@@ -1,0 +1,11 @@
+{
+  "python.pythonPath": "${workspaceFolder}/backend/.iksde_bank_env/bin/python3.8",
+  "python.linting.pylintEnabled": false,
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.formatting.provider": "black",
+  "javascript.editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescriptreact.editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.editor.defaultFormatter": "esbenp.prettier-vscode",
+  "jsonc.editor.defaultFormatter": "esbenp.prettier-vscode"
+}
