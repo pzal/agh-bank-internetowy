@@ -4,6 +4,7 @@ import HomePage from '../pages/HomePage'
 import NewTransferPage from '../pages/NewTransferPage'
 import AllTransfersPage from '../pages/AllTransfersPage'
 import ContactsPage from '../pages/ContactsPage'
+import NewContactPage from '../pages/NewContactPage'
 
 export default function NavigationLinks() {
   return (
@@ -17,8 +18,11 @@ export default function NavigationLinks() {
           <Route path="/transfers/all">
             <AllTransfersPage />
           </Route>
-          <Route path="/contacts">
+          <Route path="/contacts/all">
             <ContactsPage />
+          </Route>
+          <Route path="/contacts/new">
+            <NewContactPage />
           </Route>
           <Route path="*">
             <Redirect to="/home" />

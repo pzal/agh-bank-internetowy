@@ -35,3 +35,10 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     objects = UserManager()
     all_objects = UserManager(archived_too=True)
+
+
+class Contact(BaseModel):
+    # user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    
+    name = models.TextField(blank=False, null=False)
+    account_number = models.TextField(blank=False, null=False)

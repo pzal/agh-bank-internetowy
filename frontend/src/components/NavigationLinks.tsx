@@ -33,7 +33,7 @@ export default function NavigationLinks() {
             <ListItemText primary="Wszystkie przelewy" />
           </ListItem>
         </Link>
-        <Link to="/contacts">
+        <Link to="/contacts/all">
           <ListItem button>
             <ListItemIcon>
               <ContactsIcon />

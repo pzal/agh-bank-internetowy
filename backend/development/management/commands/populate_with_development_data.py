@@ -2,6 +2,7 @@ import factory
 from tqdm import tqdm
 from django.core.management.base import BaseCommand, CommandError
 from users.models import User
+from users.tests.utils import ContactFactory
 
 
 class Command(BaseCommand):
@@ -14,3 +15,5 @@ class Command(BaseCommand):
                 # last_name="Admin",
                 password="secret",
             )
+
+        ContactFactory.create_batch(10)

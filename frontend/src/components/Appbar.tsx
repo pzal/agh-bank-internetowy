@@ -30,8 +30,11 @@ export default function Appbar() {
             <Route path="/transfers/all">
               Wszystkie przelewy
             </Route>
-            <Route path="/contacts">
+            <Route path="/contacts/all">
               Kontakty
+            </Route>
+            <Route path="/contacts/new">
+              Nowy kontakt
             </Route>
           </Switch>
         </Typography>

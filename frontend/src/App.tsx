@@ -26,7 +26,6 @@ const BrandName = styled.div`
     font-size: 1.6rem;
     font-weight: 700;
 
-    text-decoration: none;
     color: rgb(88, 85, 116);
   }
 `

@@ -3,8 +3,8 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from users.utils import AuthUserSerializer
-from users.models import User
-from users.serializers import UserSerializer
+from users.models import User, Contact
+from users.serializers import UserSerializer, ContactSerializer
 
 
 class AuthTokenView(ObtainAuthToken):
@@ -25,4 +25,16 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.request.user
         users = self.queryset.filter(id=user.id)
         return UserSerializer(instance=users, many=True).data
+
+
+
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+
+    def get_queryset(self):
+        # user = self.request.user
+        # users = self.queryset.filter(id=user.id)
+        contacts = self.queryset.all()
+        return ContactSerializer(instance=contacts, many=True).data
 
