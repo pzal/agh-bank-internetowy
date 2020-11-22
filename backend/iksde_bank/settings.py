@@ -37,6 +37,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "development",
+    "transfers",
     "users",
     "utils",
 ]

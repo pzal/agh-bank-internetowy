@@ -13,6 +13,7 @@ urlpatterns = (
     admin_patterns
     + [
         path("users/", include("users.urls")),
+        path("transfers/", include("transfers.urls")),
     ]
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 )  # TODO Not suitable for production

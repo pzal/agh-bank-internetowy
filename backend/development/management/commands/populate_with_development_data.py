@@ -3,6 +3,7 @@ from tqdm import tqdm
 from django.core.management.base import BaseCommand, CommandError
 from users.models import User
 from users.tests.utils import ContactFactory
+from transfers.tests.utils import TransferFactory
 
 
 class Command(BaseCommand):
@@ -16,4 +17,5 @@ class Command(BaseCommand):
                 password="secret",
             )
 
-        ContactFactory.create_batch(10)
+        contacts = ContactFactory.create_batch(10)
+        TransferFactory.create_batch(20, recipient=factory.Iterator(contacts))
