@@ -15,6 +15,8 @@ migrate:
 
 clean:
 	docker-compose down -v
+	rm celerybeat-schedule || true
+	rm celerybeat.pid || true
 
 rebuild:
 	docker-compose build
