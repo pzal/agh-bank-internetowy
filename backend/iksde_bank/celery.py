@@ -12,5 +12,9 @@ app = Celery("iksde_bank")
 #   should have a `CELERY_` prefix.
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
+app.conf.task_routes = {
+    'transfers.tasks.*': {'queue': 'transfers'},
+}
+
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()

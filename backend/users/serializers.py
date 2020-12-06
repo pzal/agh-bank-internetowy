@@ -18,3 +18,6 @@ class ContactSerializer(serializers.ModelSerializer):
             "name",
             "account_number",
         ]
+        extra_kwargs = {
+            "id": {"read_only": False, "required": False},
+        }

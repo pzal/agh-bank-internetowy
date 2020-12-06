@@ -62,6 +62,7 @@ CELERY_BEAT_SCHEDULE = {
         "task": "development.tasks.debug_task",
         "schedule": crontab(hour=16, minute=0, day_of_week="friday"),
     },
+    "transfer_settling_task": {"task": "transfers.tasks.settle_transfers_task", "schedule": 60},
 }
 
 MIDDLEWARE = [
