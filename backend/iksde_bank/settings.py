@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
-DEBUG = bool(os.environ["DEBUG"])
+DEBUG = os.environ["ENVIRONMENT"] != 'production'
 
 AUTH_USER_MODEL = "users.User"
 
@@ -125,11 +125,12 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
     ),
+    'EXCEPTION_HANDLER': 'utils.exceptions.custom_exception_handler'
 }
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pl"
 TIME_ZONE = "Europe/Warsaw"
 USE_I18N = True
 USE_L10N = True
