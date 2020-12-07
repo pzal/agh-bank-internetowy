@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from users.utils import AuthUserSerializer
 from users.models import User, Contact
 from users.serializers import UserSerializer, ContactSerializer
-from transfers.serializers import TransferSerializer
+from transfers.serializers import TransferSerializer, FullTransferSerializer
 from transfers.models import Transfer
 
 
@@ -15,8 +15,17 @@ class TransferViewSet(viewsets.ModelViewSet):
     serializer_class = TransferSerializer
 
     def get_queryset(self):
-        # user = self.request.user
-        # users = self.queryset.filter(id=user.id)
-        transfers = self.queryset.all()
-        return TransferSerializer(instance=transfers, many=True).data
+        return super().get_queryset().for_user(user=self.request.user)
+
+    def get_serializer_class(self):
+        full_serializer = self.request.query_params.get("full_serializer") == 'true'
+        if full_serializer:
+            return FullTransferSerializer
+        
+        return TransferSerializer
+
+    def perform_create(self, serializer):
+        serializer.is_valid(raise_exception=True)
+
+        return serializer.save(user=self.request.user)
 

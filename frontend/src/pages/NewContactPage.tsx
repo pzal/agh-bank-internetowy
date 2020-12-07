@@ -25,27 +25,14 @@ import IconButton from '@material-ui/core/IconButton'
 import Collapse from '@material-ui/core/Collapse'
 import CloseIcon from '@material-ui/icons/Close'
 import styled from 'styled-components'
+import { apiPost, useApiGet } from '../utils/api'
 
 const ContentWrapper = styled.div`
   max-width: 700px;
 `
 
-const GET_CONTACTS_URL = `${process.env.REACT_APP_API_URL}/users/contacts/`
-const apiGetContacts = () =>
-  axios.get(GET_CONTACTS_URL).then(response => {
-    return response
-  })
-
-const ADD_CONTACT_URL = `${process.env.REACT_APP_API_URL}/users/contacts/`
-const apiAddContact = (name: string, accountNumber: string) =>
-  axios
-    .post(ADD_CONTACT_URL, {name, account_number: accountNumber})
-    .then(response => {
-      return response
-    })
-
 export default function NewContactPage() {
-  const {data: response, isPending} = useAsync({promiseFn: apiGetContacts})
+  const {data: response, isPending} = useApiGet(`${process.env.REACT_APP_API_URL}/users/contacts/`)
   const [showSuccess, setShowSuccess] = React.useState(false)
   const [showFailure, setShowFailure] = React.useState(false)
   const [name, setName] = React.useState('')
@@ -55,7 +42,7 @@ export default function NewContactPage() {
     setShowSuccess(false)
     setShowFailure(false)
 
-    apiAddContact(name, accountNumber)
+    apiPost(`${process.env.REACT_APP_API_URL}/users/contacts/`, {name, account_number: accountNumber})
       .then(res => {
         console.log('res', res)
         setShowSuccess(true)

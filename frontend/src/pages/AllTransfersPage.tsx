@@ -22,16 +22,11 @@ import PersonIcon from '@material-ui/icons/Person'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow'
 import styled from 'styled-components'
+import { useApiGet } from '../utils/api'
 
 const Spacing = styled.div`
   height: 20px;
 `
-
-const GET_TRANSFERS_URL = `${process.env.REACT_APP_API_URL}/transfers/`
-const apiGetTransfers = () =>
-  axios.get(GET_TRANSFERS_URL).then(response => {
-    return response
-  })
 
 interface Contact {
   id: any
@@ -47,16 +42,16 @@ interface Transfer {
 }
 
 export default function AllTransfersPage() {
-  const {data: response, isPending} = useAsync({promiseFn: apiGetTransfers})
+  const {data: data, isPending} = useApiGet(`${process.env.REACT_APP_API_URL}/transfers/?full_serializer=true`)
 
   let pendingTransfers = null
   let finishedTransfers = null
 
-  if (response) {
-    pendingTransfers = response.data.filter(
+  if (data) {
+    pendingTransfers = data.filter(
       (transfer: Transfer) => transfer.pending,
     )
-    finishedTransfers = response.data.filter(
+    finishedTransfers = data.filter(
       (transfer: Transfer) => !transfer.pending,
     )
   }

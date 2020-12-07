@@ -20,15 +20,10 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 import PersonIcon from '@material-ui/icons/Person'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
-
-const GET_CONTACTS_URL = `${process.env.REACT_APP_API_URL}/users/contacts/`
-const apiGetContacts = () =>
-  axios.get(GET_CONTACTS_URL).then(response => {
-    return response
-  })
+import { useApiGet } from '../utils/api'
 
 export default function ContactsPage() {
-  const {data: response, isPending} = useAsync({promiseFn: apiGetContacts})
+  const {data: response, isPending} = useApiGet(`${process.env.REACT_APP_API_URL}/users/contacts/`)
 
   return (
     <Fragment>
@@ -50,7 +45,7 @@ export default function ContactsPage() {
         </Grid>
       </Grid>
       <List>
-        {response?.data.map(
+        {response?.map(
           (contact: {name: string; id: string; account_number: string}) => (
             <ListItem key={contact.id}>
               <ListItemAvatar>

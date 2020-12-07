@@ -30,6 +30,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Collapse from '@material-ui/core/Collapse'
 import CloseIcon from '@material-ui/icons/Close'
 import styled from 'styled-components'
+import {useApiGet, apiPost} from '../utils/api'
 
 const ContentWrapper = styled.div`
   max-width: 700px;
@@ -39,46 +40,25 @@ const ContentWrapper = styled.div`
   }
 `
 
-const GET_CONTACTS_URL = `${process.env.REACT_APP_API_URL}/users/contacts/`
-const apiGetContacts = () =>
-  axios.get(GET_CONTACTS_URL).then(response => {
-    return response
-  })
-
-const ADD_TRANSFER_URL = `${process.env.REACT_APP_API_URL}/transfers/`
-const apiAddTransfer = ({
-  recipient,
-  amount,
-}: {
-  recipient?: number
-  amount: string
-}) => {
-  console.log('posing', recipient, amount)
-
-  return axios.post(ADD_TRANSFER_URL, {recipient, amount}).then(response => {
-    return response
-  })
-}
-
 interface Contact {
   id: any
   name: string
 }
 
 export default function NewTransferPage() {
-  const {data: contactsResponse, isPending} = useAsync({
-    promiseFn: apiGetContacts,
-  })
+  const {data: contactsResponse} = useApiGet(
+    `${process.env.REACT_APP_API_URL}/users/contacts/`,
+  )
   const [showSuccess, setShowSuccess] = React.useState(false)
   const [showFailure, setShowFailure] = React.useState(false)
-  const [recipient, setRecipient] = React.useState<any>(undefined)
+  const [recipientId, setRecipientId] = React.useState('')
   const [amount, setAmount] = React.useState('')
 
   const onSave = () => {
     setShowSuccess(false)
     setShowFailure(false)
 
-    apiAddTransfer({recipient, amount})
+    apiPost(`${process.env.REACT_APP_API_URL}/transfers/`, {recipient: recipientId, amount})
       .then(res => {
         console.log('res', res)
         setShowSuccess(true)
@@ -100,17 +80,16 @@ export default function NewTransferPage() {
                 Adresat
               </InputLabel>
               <Select
-                value={recipient}
-                onChange={e =>
-                  setRecipient(
-                    contactsResponse?.data.filter(
-                      (contact: Contact) => contact.id === e.target.value,
-                    )[0],
-                  )
+                value={recipientId}
+                onChange={e => {
+                  const recipientId = e.target.value as string
+                  setRecipientId(recipientId )}
                 }
               >
-                {contactsResponse?.data.map((contact: Contact) => (
-                  <MenuItem value={contact.id}>{contact.name}</MenuItem>
+                {contactsResponse?.map((contact: Contact) => (
+                  <MenuItem key={contact.id} value={contact.id}>
+                    {contact.name}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>

@@ -2,7 +2,10 @@ from rest_framework import viewsets
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import action
 from users.utils import AuthUserSerializer
+from utils.logging import log, error
 from users.models import User, Contact
 from users.serializers import UserSerializer, ContactSerializer
 
@@ -22,9 +25,17 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def get_queryset(self):
+        return super().get_queryset().for_user(user=self.request.user)
+
+    @action(detail=False, methods=["get"])
+    def me(self, request):
         user = self.request.user
-        users = self.queryset.filter(id=user.id)
-        return UserSerializer(instance=users, many=True).data
+
+        if not user or user.is_anonymous:
+            return Response({'error': 'Not authorized'}, status=401)
+        
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
 
 
@@ -33,8 +44,9 @@ class ContactViewSet(viewsets.ModelViewSet):
     serializer_class = ContactSerializer
 
     def get_queryset(self):
-        # user = self.request.user
-        # users = self.queryset.filter(id=user.id)
-        contacts = self.queryset.all()
-        return ContactSerializer(instance=contacts, many=True).data
+        return super().get_queryset().for_user(user=self.request.user)
 
+    def perform_create(self, serializer):
+        serializer.is_valid(raise_exception=True)
+
+        return serializer.save(user=self.request.user)

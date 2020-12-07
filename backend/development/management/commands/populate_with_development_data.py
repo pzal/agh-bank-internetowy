@@ -9,13 +9,14 @@ from transfers.tests.utils import TransferFactory
 class Command(BaseCommand):
     def handle(self, *args, **options):
         # Does admin already exist?
-        if not User.objects.filter(email="admin@example.com").exists():
-            User.objects.create_superuser(
+        admin = User.objects.filter(email="admin@example.com").first()
+        if not admin:
+            admin = User.objects.create_superuser(
                 email="admin@example.com",
                 # first_name="Admin",
                 # last_name="Admin",
                 password="secret",
             )
 
-        contacts = ContactFactory.create_batch(10)
-        TransferFactory.create_batch(20, recipient=factory.Iterator(contacts))
+        contacts = ContactFactory.create_batch(10, user=admin)
+        TransferFactory.create_batch(20, user=admin, recipient=factory.Iterator(contacts))

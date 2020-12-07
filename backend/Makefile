@@ -10,6 +10,13 @@ resetup:
 makemigrations:
 	docker-compose run api python manage.py makemigrations
 
+recreate_migrations:
+	find . -path "./*/migrations/*.py" -not -name "__init__.py" -not -path "*site-packages*" -delete || exit 1
+	docker-compose run api python manage.py makemigrations
+
+sp:
+	docker-compose run api python manage.py shell_plus
+
 migrate:
 	docker-compose run api python manage.py migrate
 

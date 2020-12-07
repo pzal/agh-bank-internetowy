@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from utils.models import BaseModel, BaseModelManager
+from users.querysets import AccountQuerySet, UserQuerySet, ContactQuerySet
 
 
 class UserManager(BaseModelManager, BaseUserManager):
@@ -33,12 +34,21 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)  # only for django admin
 
-    objects = UserManager()
-    all_objects = UserManager(archived_too=True)
+    objects = UserManager.from_queryset(UserQuerySet)()
+
+
+class Account(BaseModel):
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    
+    account_number = models.TextField(blank=False, null=False)
+
+    objects = BaseModelManager.from_queryset(AccountQuerySet)()
 
 
 class Contact(BaseModel):
-    # user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     
     name = models.TextField(blank=False, null=False)
     account_number = models.TextField(blank=False, null=False)
+
+    objects = BaseModelManager.from_queryset(ContactQuerySet)()

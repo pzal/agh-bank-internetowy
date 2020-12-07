@@ -10,12 +10,9 @@ import Divider from '@material-ui/core/Divider'
 import styled from 'styled-components'
 import NavigationLinks from './components/NavigationLinks'
 import PageRoutes from './components/PageRoutes'
-
-const PING_URL = `${process.env.REACT_APP_API_URL}/ping`
-const pingAPI = () =>
-  axios.get(PING_URL).then(response => {
-    return response
-  })
+import LoginPage from './pages/LoginPage'
+import {useCookie, API_KEY_COOKIE, setApiKeyInCookie} from './utils/cookies'
+import {useApiGet} from './utils/api'
 
 const BrandName = styled.div`
   display: flex;
@@ -56,10 +53,73 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function App() {
-  const {data: response, isPending} = useAsync({promiseFn: pingAPI})
+enum AUTH_STATE {
+  LOGGED_IN,
+  LOGGED_OUT,
+  UNSURE,
+}
 
+function App() {
+  const [authState, setAuthState] = useState(AUTH_STATE.UNSURE)
+  const apiKey = useCookie(API_KEY_COOKIE)
   const classes = useStyles()
+
+  const {data, error, isPending, isRejected, run} = useApiGet(
+    `${process.env.REACT_APP_API_URL}/users/me/`,
+    // Deferred so that we don't fire again
+    // when we get `apiKey` for the first time.
+    true,
+  )
+
+  React.useEffect(() => {
+    if (apiKey) {
+      // Potentially logged in, but we have to check if it's valid.
+
+      if (authState === AUTH_STATE.LOGGED_OUT) {
+        // Means we have been at the login screen.
+        // So the token pretty much must be valid.
+        setAuthState(AUTH_STATE.LOGGED_IN)
+      } else {
+        // Let's see if we get any client for that token.
+        console.log('Reloading app: checking if new apiKey allows us to login.')
+        run()
+      }
+    } else {
+      // No apiKey, no chance.
+      setAuthState(AUTH_STATE.LOGGED_OUT)
+    }
+  }, [apiKey])
+
+  React.useEffect(() => {
+    console.log('got data', data, error, isRejected)
+    
+    // If some response, check if it actually returned any client.
+    if (data) {
+      authState !== AUTH_STATE.LOGGED_IN && setAuthState(AUTH_STATE.LOGGED_IN)
+    } else if (error) {
+      setApiKeyInCookie(undefined)
+    }
+  }, [data, error])
+
+  React.useEffect(() => {
+    if (isRejected) {
+      authState !== AUTH_STATE.LOGGED_OUT && setAuthState(AUTH_STATE.LOGGED_OUT)
+      setApiKeyInCookie(undefined)
+    }
+  }, [isRejected])
+
+  if (authState === AUTH_STATE.UNSURE) {
+    // return (
+    //   <div>TODO loading</div>
+    // )
+    return (
+      null
+    )
+  }
+
+  if (authState !== AUTH_STATE.LOGGED_IN) {
+    return <LoginPage />
+  }
 
   return (
     <div className={classes.root}>
@@ -73,7 +133,7 @@ function App() {
         anchor="left"
       >
         <BrandName className={classes.toolbar}>
-          <Link to="/home">Iksde Bank</Link>
+          <Link to="/home">Bank</Link>
         </BrandName>
         <Divider />
         <NavigationLinks />

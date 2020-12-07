@@ -16,7 +16,7 @@ class ContactFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Contact
 
-    # user = factory.SubFactory(UserFactory)
+    user = factory.SubFactory(UserFactory)
 
     name = factory.Faker("first_name")
     account_number = factory.Faker("iban")

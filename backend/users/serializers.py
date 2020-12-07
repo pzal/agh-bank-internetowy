@@ -16,8 +16,7 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "user",
             "account_number",
         ]
-        extra_kwargs = {
-            "id": {"read_only": False, "required": False},
-        }
+        read_only_fields = ("user", )

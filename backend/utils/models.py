@@ -19,7 +19,7 @@ class BaseModel(models.Model):
     is_archived = models.BooleanField(default=False)
 
     objects = BaseModelManager()
-    all_objects = BaseModelManager(archived_too=True)
+    # all_objects = BaseModelManager(archived_too=True)
 
     class Meta:
         abstract = True
