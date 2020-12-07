@@ -3,9 +3,8 @@ setup:
 	docker-compose run api python manage.py populate_with_development_data
 
 resetup:
-	docker-compose down -v
-	docker-compose run api python manage.py migrate
-	docker-compose run api python manage.py populate_with_development_data
+	$(MAKE) clean
+	$(MAKE) setup
 
 makemigrations:
 	docker-compose run api python manage.py makemigrations

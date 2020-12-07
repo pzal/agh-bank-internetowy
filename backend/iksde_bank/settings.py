@@ -1,6 +1,10 @@
 import os
 from celery.schedules import crontab
+import sentry_sdk
+from corsheaders.defaults import default_headers
+from sentry_sdk.integrations.django import DjangoIntegration
 
+RELEASE = '0.5.0'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,6 +19,9 @@ AUTH_USER_MODEL = "users.User"
 ALLOWED_HOSTS = ["*"]
 # CORS_ORIGIN_WHITELIST = [os.environ["LANDING_ENDPOINT"], os.environ["APP_ENDPOINT"]]
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'sentry-trace',
+]
 
 # Application definition
 
@@ -43,6 +50,25 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
+
+if os.environ["SERVER_SENTRY_DSN"]:
+    sentry_sdk.init(
+        dsn=os.environ["SERVER_SENTRY_DSN"],
+        integrations=[DjangoIntegration()],
+        release=RELEASE,
+        environment=os.environ["ENVIRONMENT"],
+        in_app_include=LOCAL_APPS,
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production,
+        traces_sample_rate=1.0,
+
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True
+    )
+else:
+    print ('Skipping sentry initialization.')
 
 EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_HOST_USER = "apikey"
