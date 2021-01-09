@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {Switch, Route, Link, Redirect} from 'react-router-dom'
+import React from 'react'
+import {Switch, Route} from 'react-router-dom'
 import {makeStyles} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -43,6 +43,7 @@ export default function Appbar() {
               <Route path="/transfers/all">Wszystkie przelewy</Route>
               <Route path="/contacts/all">Kontakty</Route>
               <Route path="/contacts/new">Nowy kontakt</Route>
+              <Route path="/contacts/:contactId">Edycja kontaktu</Route>
             </Switch>
           </Typography>
           <Button onClick={logout} color="default">wyloguj</Button>

@@ -1,28 +1,63 @@
 import axios from 'axios'
-import {useState, useEffect} from 'react'
-import {DeferFn, PromiseFn, useAsync} from 'react-async'
+import {useAsync} from 'react-async'
 
-import {useCookie, API_KEY_COOKIE, getApiKeyFromCookie} from './cookies'
+import {getApiKeyFromCookie} from './cookies'
 
 const _apiGet = async ({url, ...args}: any) => {
-  const headers: any = {'Content-Type': 'application/json', Accept: 'application/json'}
+  const headers: any = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  }
   const token = getApiKeyFromCookie()
   if (token) {
     headers['Authorization'] = `Token ${token}`
   }
 
-  return axios.get(url, {
-    headers,
-  }).then(response => response.data)
+  return axios
+    .get(url, {
+      headers,
+    })
+    .then(response => response.data)
 }
 
 export const apiPost = (url: string, data: any) => {
-  const headers: any = {'Content-Type': 'application/json', Accept: 'application/json'}
+  const headers: any = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  }
   const token = getApiKeyFromCookie()
   if (token) {
     headers['Authorization'] = `Token ${token}`
   }
   return axios.post(url, data, {
+    headers,
+  })
+}
+
+export const apiPatch = (url: string, data: any) => {
+  const headers: any = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  }
+  const token = getApiKeyFromCookie()
+  if (token) {
+    headers['Authorization'] = `Token ${token}`
+  }
+  return axios.patch(url, data, {
+    headers,
+  })
+}
+
+export const apiDelete = (url: string) => {
+  const headers: any = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  }
+  const token = getApiKeyFromCookie()
+  if (token) {
+    headers['Authorization'] = `Token ${token}`
+  }
+  return axios.delete(url, {
     headers,
   })
 }
@@ -49,7 +84,6 @@ export const useApiGet = (url: string, deferred = false) => {
   })
 
   // const jsonData = response.data as {[key: string]: any}
-
 
   return {data, error, isPending, isRejected, reload, run}
 }

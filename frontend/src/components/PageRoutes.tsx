@@ -1,10 +1,11 @@
-import React, {Fragment, useState} from 'react'
-import {Switch, Route, Link, Redirect} from 'react-router-dom'
+import React from 'react'
+import {Switch, Route, Redirect} from 'react-router-dom'
 import HomePage from '../pages/HomePage'
 import NewTransferPage from '../pages/NewTransferPage'
 import AllTransfersPage from '../pages/AllTransfersPage'
 import ContactsPage from '../pages/ContactsPage'
 import NewContactPage from '../pages/NewContactPage'
+import EditContactPage from '../pages/EditContactPage'
 
 export default function NavigationLinks() {
   return (
@@ -23,6 +24,9 @@ export default function NavigationLinks() {
           </Route>
           <Route path="/contacts/new">
             <NewContactPage />
+          </Route>
+          <Route path="/contacts/:contactId">
+            <EditContactPage />
           </Route>
           <Route path="*">
             <Redirect to="/home" />
