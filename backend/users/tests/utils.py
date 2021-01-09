@@ -1,13 +1,13 @@
 import factory
 from django.contrib.auth.hashers import make_password
-from users.models import User, Contact
+from users.models import User, Contact, Account
 
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
 
-    email = factory.Faker("email")
+    email = factory.Sequence(lambda n: "doe%03d@example.com" % n)
     password = factory.LazyFunction(lambda: make_password("test"))
 
 
@@ -18,4 +18,13 @@ class ContactFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
 
     name = factory.Faker("first_name")
+    account_number = factory.Faker("iban")
+
+
+class AccountFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Account
+
+    user = factory.SubFactory(UserFactory)
+
     account_number = factory.Faker("iban")

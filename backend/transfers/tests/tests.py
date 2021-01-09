@@ -21,7 +21,9 @@ class TransferTestCase(TestCase):
 
 class TransferSettlingTestCase(TestCase):
     def setUp(self):
-        self.pending_transfer = TransferFactory.create(pending=True)
+        self.pending_transfer = TransferFactory.create(
+            pending=True, date_confirmed=None
+        )
 
     def test_transfer_is_for_settling(self):
         self.assertIn(self.pending_transfer, Transfer.objects.for_settling())
@@ -30,7 +32,7 @@ class TransferSettlingTestCase(TestCase):
 class TransferViewsTestCase(TestCase):
     def setUp(self):
         user = UserFactory.create()
-        self.transfers = TransferFactory.create_batch(5, user=user)
+        self.transfers = TransferFactory.create_batch(5, sender_user=user)
         self.other_transfers = TransferFactory.create_batch(5)
 
         auth_token, created = Token.objects.get_or_create(user=user)
@@ -50,15 +52,15 @@ class TransferViewsTestCase(TestCase):
         response = self.client.get("/transfers/", format="json")
         data = json.loads(response.content)
         returned_ids = [t["id"] for t in data]
-        
+
         for transfer in self.other_transfers:
             self.assertNotIn(transfer.id, returned_ids)
-    
+
     def test_transfers_list_shows_users_transfers(self):
         response = self.client.get("/transfers/", format="json")
         data = json.loads(response.content)
         returned_ids = [t["id"] for t in data]
-        
+
         self.assertEqual(len(self.transfers), len(returned_ids))
         for expected_transfer in self.transfers:
             self.assertIn(expected_transfer.id, returned_ids)

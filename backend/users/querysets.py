@@ -8,7 +8,7 @@ class ContactQuerySet(models.QuerySet):
 
 class AccountQuerySet(models.QuerySet):
     def for_user(self, user):
-        return self.filter(id=user.id)
+        return self.filter(user=user.id)
 
 
 class UserQuerySet(models.QuerySet):

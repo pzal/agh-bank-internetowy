@@ -41,6 +41,7 @@ export default function Appbar() {
               <Route path="/home">Start</Route>
               <Route path="/transfers/new">Nowy przelew</Route>
               <Route path="/transfers/all">Wszystkie przelewy</Route>
+              <Route path="/transfers/:transferId">Szczegóły przelewu</Route>
               <Route path="/contacts/all">Kontakty</Route>
               <Route path="/contacts/new">Nowy kontakt</Route>
               <Route path="/contacts/:contactId">Edycja kontaktu</Route>

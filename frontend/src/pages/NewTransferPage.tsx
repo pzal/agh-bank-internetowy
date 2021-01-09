@@ -27,20 +27,36 @@ interface Contact {
   name: string
 }
 
+interface User {
+  id: any
+  email: string
+  account_set: any[]
+}
+
 export default function NewTransferPage() {
   const {data: contactsResponse} = useApiGet(
     `${process.env.REACT_APP_API_URL}/users/contacts/`,
+  )
+  const {data: me} = useApiGet<User>(
+    `${process.env.REACT_APP_API_URL}/users/me/`,
   )
   const [showSuccess, setShowSuccess] = React.useState(false)
   const [showFailure, setShowFailure] = React.useState(false)
   const [recipientId, setRecipientId] = React.useState('')
   const [amount, setAmount] = React.useState('')
+  const [title, setTitle] = React.useState('')
 
   const onSave = () => {
     setShowSuccess(false)
     setShowFailure(false)
 
-    apiPost(`${process.env.REACT_APP_API_URL}/transfers/`, {recipient: recipientId, amount})
+    apiPost(`${process.env.REACT_APP_API_URL}/transfers/`, {
+      recipient: recipientId,
+      amount,
+      title,
+      sender_user: me?.id,
+      sender_account: me?.account_set[0],
+    })
       .then(res => {
         console.log('res', res)
         setShowSuccess(true)
@@ -59,14 +75,14 @@ export default function NewTransferPage() {
           <Grid item>
             <FormControl variant="filled">
               <InputLabel id="demo-simple-select-filled-label">
-                Adresat
+                Odbiorca
               </InputLabel>
               <Select
                 value={recipientId}
                 onChange={e => {
                   const recipientId = e.target.value as string
-                  setRecipientId(recipientId )}
-                }
+                  setRecipientId(recipientId)
+                }}
               >
                 {contactsResponse?.map((contact: Contact) => (
                   <MenuItem key={contact.id} value={contact.id}>
@@ -75,6 +91,18 @@ export default function NewTransferPage() {
                 ))}
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item>
+            <TextField
+              id="filled-helperText"
+              label="Tytuł"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              // defaultValue="Default Value"
+              // helperText="Some important text"
+              fullWidth
+              variant="filled"
+            />
           </Grid>
           <Grid item>
             <TextField

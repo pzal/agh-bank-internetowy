@@ -14,7 +14,12 @@ class TransferViewSet(viewsets.ModelViewSet):
     serializer_class = TransferSerializer
 
     def get_queryset(self):
-        return super().get_queryset().for_user(user=self.request.user)
+        return (
+            super()
+            .get_queryset()
+            .for_user(user=self.request.user)
+            .order_by("-date_confirmed")
+        )
 
     def get_serializer_class(self):
         full_serializer = self.request.query_params.get("full_serializer") == "true"
@@ -26,4 +31,4 @@ class TransferViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.is_valid(raise_exception=True)
 
-        return serializer.save(user=self.request.user)
+        return serializer.save(sender_user=self.request.user)

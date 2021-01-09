@@ -62,7 +62,7 @@ export const apiDelete = (url: string) => {
   })
 }
 
-export const useApiGet = (url: string, deferred = false) => {
+export function useApiGet<T = any>(url: string, deferred = false) {
   const callParams: any = {}
   if (deferred) {
     const deferFn = () => _apiGet({url})
@@ -72,14 +72,14 @@ export const useApiGet = (url: string, deferred = false) => {
     callParams['url'] = url
   }
   interface RetValue {
-    data?: any
+    data?: T
     isPending: boolean
     isRejected: boolean
     error?: any
     reload: () => void
     run: () => void
   }
-  const {data, isPending, error, isRejected, reload, run}: RetValue = useAsync({
+  const {data, isPending, error, isRejected, reload, run}: RetValue = useAsync<T>({
     ...callParams,
   })
 

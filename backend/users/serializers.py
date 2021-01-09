@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import User, Contact
+from users.models import User, Contact, Account
 from users.actions import (
     validate_contact_creation_by_user,
     validate_contact_update_by_user,
@@ -12,6 +12,17 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "email",
+            "account_set"
+        ]
+
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = [
+            "id",
+            "user",
+            "account_number",
         ]
 
 
