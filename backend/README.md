@@ -21,3 +21,7 @@ source ./.iksde_bank_env/bin/activate
 pip install -r ./requirements.txt
 pip install -r ./requirements-dev.txt
 ```
+* Create shared docker network:
+```bash
+docker network create shared-network
+```

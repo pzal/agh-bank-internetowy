@@ -29,3 +29,6 @@ rebuild:
 
 up:
 	docker-compose up
+
+up-elk:
+	docker-compose -f elk/docker-compose.yml up

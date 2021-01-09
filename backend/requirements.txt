@@ -36,7 +36,6 @@ graphql-relay==2.0.1
 idna==2.10
 jmespath==0.10.0
 kombu==4.6.11
-logstash==0.1.dev0
 lxml==4.5.2
 mccabe==0.6.1
 pathspec==0.8.0
@@ -50,6 +49,7 @@ PyJWT==1.7.1
 pynliner==0.8.0
 python-dateutil==2.8.1
 python-http-client==3.3.1
+python-logstash==0.4.6
 pytz==2020.1
 quill-delta==1.0.1
 redis==3.3.11
