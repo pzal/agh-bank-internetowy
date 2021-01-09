@@ -32,3 +32,6 @@ up:
 
 up-elk:
 	docker-compose -f elk/docker-compose.yml up
+
+test:
+	docker-compose run api python manage.py test

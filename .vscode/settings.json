@@ -1,5 +1,5 @@
 {
-  "python.pythonPath": "${workspaceFolder}/backend/.iksde_bank_env/bin/python3.8",
+  "python.pythonPath": "backend/.iksde_bank_env/bin/python3",
   "python.linting.pylintEnabled": false,
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
