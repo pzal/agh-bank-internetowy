@@ -1,4 +1,5 @@
 import os
+import sys
 from celery.schedules import crontab
 import sentry_sdk
 from corsheaders.defaults import default_headers
@@ -12,6 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ["SECRET_KEY"]
 
 DEBUG = os.environ["ENVIRONMENT"] != "production"
+TESTING = sys.argv[1:2] == ["test"]
 
 AUTH_USER_MODEL = "users.User"
 
@@ -51,7 +53,7 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
-if os.environ["SERVER_SENTRY_DSN"]:
+if os.environ["SERVER_SENTRY_DSN"] and not TESTING:
     sentry_sdk.init(
         dsn=os.environ["SERVER_SENTRY_DSN"],
         integrations=[DjangoIntegration()],
@@ -71,13 +73,13 @@ else:
 
 EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_HOST_USER = "apikey"
-EMAIL_HOST_PASSWORD = os.environ["SENDGRID_API_KEY"]
+EMAIL_HOST_PASSWORD = os.environ["SENDGRID_API_KEY"] if not TESTING else None
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 
-SENGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
+SENGRID_API_KEY = os.environ["SENDGRID_API_KEY"] if not TESTING else None
 
 CELERY_BROKER_URL = f'redis://{os.environ["REDIS_HOST"]}:{os.environ["REDIS_PORT"]}'
 CELERY_IMPORTS = []
@@ -153,6 +155,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
     ),
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "EXCEPTION_HANDLER": "utils.exceptions.custom_exception_handler",
 }
 
@@ -184,6 +187,10 @@ LOGGING = {
     },
 }
 
+if TESTING:
+    print("Emptying LOGGING setting because we're testing.")
+    LOGGING = {}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 LANGUAGE_CODE = "pl"
@@ -198,4 +205,7 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 DEBUG_MAIL_RECIPIENT = os.environ["DEBUG_MAIL_RECIPIENT"]
+
 SLEEP_TIME = 0.5
+if TESTING:
+    SLEEP_TIME = 0
