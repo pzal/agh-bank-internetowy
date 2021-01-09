@@ -28,9 +28,9 @@ class Transfer(BaseModel):
         related_name="transfers_received",
         on_delete=models.CASCADE,
     )
+    recipient = models.ForeignKey("users.Contact", on_delete=models.CASCADE)
 
     title = models.TextField(blank=False)
-    recipient = models.ForeignKey("users.Contact", on_delete=models.CASCADE)
     amount = models.DecimalField(
         max_digits=10, decimal_places=2, blank=False, null=False
     )
