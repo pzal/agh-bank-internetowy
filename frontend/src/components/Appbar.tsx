@@ -3,8 +3,11 @@ import {Switch, Route, Link, Redirect} from 'react-router-dom'
 import {makeStyles} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
+import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import {SIDEBAR_WIDTH} from '../App'
+import styled from 'styled-components'
+import {setApiKeyInCookie} from '../utils/cookies'
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -13,31 +16,37 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+const ToolbarContent = styled.div`
+  width: 100%;
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
 export default function Appbar() {
   const classes = useStyles()
+
+  const logout = () => {
+    console.log('logging out')
+    setApiKeyInCookie(undefined)
+  }
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
-        <Typography variant="h6" noWrap>
-          <Switch>
-            <Route path="/home">
-              Start
-            </Route>
-            <Route path="/transfers/new">
-              Nowy przelew
-            </Route>
-            <Route path="/transfers/all">
-              Wszystkie przelewy
-            </Route>
-            <Route path="/contacts/all">
-              Kontakty
-            </Route>
-            <Route path="/contacts/new">
-              Nowy kontakt
-            </Route>
-          </Switch>
-        </Typography>
+        <ToolbarContent>
+          <Typography variant="h6" noWrap>
+            <Switch>
+              <Route path="/home">Start</Route>
+              <Route path="/transfers/new">Nowy przelew</Route>
+              <Route path="/transfers/all">Wszystkie przelewy</Route>
+              <Route path="/contacts/all">Kontakty</Route>
+              <Route path="/contacts/new">Nowy kontakt</Route>
+            </Switch>
+          </Typography>
+          <Button onClick={logout} color="default">wyloguj</Button>
+        </ToolbarContent>
       </Toolbar>
     </AppBar>
   )

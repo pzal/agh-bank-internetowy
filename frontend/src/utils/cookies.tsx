@@ -1,5 +1,8 @@
 import {useEffect, useState} from 'react'
-import Cookies, { CookieChangeListener, CookieChangeOptions } from 'universal-cookie'
+import Cookies, {
+  CookieChangeListener,
+  CookieChangeOptions,
+} from 'universal-cookie'
 import {DateTime} from 'luxon'
 const cookies = new Cookies()
 
@@ -16,11 +19,11 @@ export const getApiKeyFromCookie = () => {
 export const setApiKeyInCookie = (apiKey?: string) => {
   // if we don't set "expires", the cookie is a session cookie by default
   if (!apiKey) {
-      console.log('yes romiving for sure')
+    console.log('yes removing for sure')
     cookies.remove(API_KEY_COOKIE, {
-        path: '/',
-        domain,
-      })
+      path: '/',
+      domain,
+    })
   } else {
     cookies.set(API_KEY_COOKIE, apiKey, {
       path: '/',
@@ -52,7 +55,10 @@ export const useCookie = (cookieName: string) => {
   const initialValue = cookies.get(cookieName, {path: '/', domain})
   const [value, setValue] = useState(initialValue)
 
-  const listener: CookieChangeListener = ({name, value}: CookieChangeOptions) => {
+  const listener: CookieChangeListener = ({
+    name,
+    value,
+  }: CookieChangeOptions) => {
     if (name === cookieName) {
       setValue(value)
     }
