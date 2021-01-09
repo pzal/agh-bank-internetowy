@@ -7,19 +7,22 @@ class _ActionError(Exception):
     """
     Pass relevant context to `args` to make traceback display the values.
     """
+
     def __init__(self, id, message, *args):
         self.id = id
         self.message = message
         self.args = args
 
     def __str__(self):
-        return f'Action {self.id}: {self.message}'
-    
+        return f"Action {self.id}: {self.message}"
+
+
 class ActionRuntimeError(_ActionError):
     """
     Only to be raised when unexpected conditions arise 
     (situations that shouldn't happen).
     """
+
     pass
 
 
@@ -28,6 +31,7 @@ class ActionUserError(_ActionError):
     Errors being a result of user doing illegal actions.
     Message is to be returned to the user.
     """
+
     pass
 
 

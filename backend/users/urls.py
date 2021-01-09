@@ -6,6 +6,4 @@ router = DefaultRouter()
 router.register(r"contacts", ContactViewSet)
 router.register(r"", UserViewSet)
 
-urlpatterns = [
-    path("api-token-auth/", AuthTokenView.as_view()), *router.urls
-    ]
+urlpatterns = [path("api-token-auth/", AuthTokenView.as_view()), *router.urls]

@@ -32,11 +32,10 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         if not user or user.is_anonymous:
-            return Response({'error': 'Not authorized'}, status=401)
-        
+            return Response({"error": "Not authorized"}, status=401)
+
         serializer = UserSerializer(user)
         return Response(serializer.data)
-
 
 
 class ContactViewSet(viewsets.ModelViewSet):

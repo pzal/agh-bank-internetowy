@@ -19,6 +19,4 @@ urlpatterns = (
 )  # TODO Not suitable for production
 
 if settings.DEBUG:
-    urlpatterns.append(
-        path("development/", include("development.urls")),
-    )
+    urlpatterns.append(path("development/", include("development.urls")),)

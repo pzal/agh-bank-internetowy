@@ -13,7 +13,7 @@ app = Celery("iksde_bank")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 app.conf.task_routes = {
-    'transfers.tasks.*': {'queue': 'transfers'},
+    "transfers.tasks.*": {"queue": "transfers"},
 }
 
 # Load task modules from all registered Django app configs.

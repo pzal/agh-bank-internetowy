@@ -4,4 +4,4 @@ from utils.logging import log, error
 # TODO remove debug task
 @celery.task()
 def debug_task():
-    log('Running debug task…')
+    log("Running debug task…")

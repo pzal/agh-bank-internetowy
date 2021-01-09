@@ -19,4 +19,6 @@ class Command(BaseCommand):
             )
 
         contacts = ContactFactory.create_batch(10, user=admin)
-        TransferFactory.create_batch(20, user=admin, recipient=factory.Iterator(contacts))
+        TransferFactory.create_batch(
+            20, user=admin, recipient=factory.Iterator(contacts)
+        )

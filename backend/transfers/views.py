@@ -9,7 +9,6 @@ from transfers.serializers import TransferSerializer, FullTransferSerializer
 from transfers.models import Transfer
 
 
-
 class TransferViewSet(viewsets.ModelViewSet):
     queryset = Transfer.objects.all()
     serializer_class = TransferSerializer
@@ -18,14 +17,13 @@ class TransferViewSet(viewsets.ModelViewSet):
         return super().get_queryset().for_user(user=self.request.user)
 
     def get_serializer_class(self):
-        full_serializer = self.request.query_params.get("full_serializer") == 'true'
+        full_serializer = self.request.query_params.get("full_serializer") == "true"
         if full_serializer:
             return FullTransferSerializer
-        
+
         return TransferSerializer
 
     def perform_create(self, serializer):
         serializer.is_valid(raise_exception=True)
 
         return serializer.save(user=self.request.user)
-

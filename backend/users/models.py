@@ -39,7 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
 class Account(BaseModel):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    
+
     account_number = models.TextField(blank=False, null=False)
 
     objects = BaseModelManager.from_queryset(AccountQuerySet)()
@@ -47,7 +47,7 @@ class Account(BaseModel):
 
 class Contact(BaseModel):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    
+
     name = models.TextField(blank=False, null=False)
     account_number = models.TextField(blank=False, null=False)
 

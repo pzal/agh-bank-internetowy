@@ -4,14 +4,14 @@ import sentry_sdk
 from corsheaders.defaults import default_headers
 from sentry_sdk.integrations.django import DjangoIntegration
 
-RELEASE = '0.5.0'
+RELEASE = "0.5.0"
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
-DEBUG = os.environ["ENVIRONMENT"] != 'production'
+DEBUG = os.environ["ENVIRONMENT"] != "production"
 
 AUTH_USER_MODEL = "users.User"
 
@@ -20,7 +20,7 @@ ALLOWED_HOSTS = ["*"]
 # CORS_ORIGIN_WHITELIST = [os.environ["LANDING_ENDPOINT"], os.environ["APP_ENDPOINT"]]
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
-    'sentry-trace',
+    "sentry-trace",
 ]
 
 # Application definition
@@ -62,13 +62,12 @@ if os.environ["SERVER_SENTRY_DSN"]:
         # of transactions for performance monitoring.
         # We recommend adjusting this value in production,
         traces_sample_rate=1.0,
-
         # If you wish to associate users to errors (assuming you are using
         # django.contrib.auth) you may enable sending PII data.
-        send_default_pii=True
+        send_default_pii=True,
     )
 else:
-    print ('Skipping sentry initialization.')
+    print("Skipping sentry initialization.")
 
 EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_HOST_USER = "apikey"
@@ -88,7 +87,10 @@ CELERY_BEAT_SCHEDULE = {
         "task": "development.tasks.debug_task",
         "schedule": crontab(hour=16, minute=0, day_of_week="friday"),
     },
-    "transfer_settling_task": {"task": "transfers.tasks.settle_transfers_task", "schedule": 60},
+    "transfer_settling_task": {
+        "task": "transfers.tasks.settle_transfers_task",
+        "schedule": 60,
+    },
 }
 
 MIDDLEWARE = [
@@ -151,35 +153,35 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
     ),
-    'EXCEPTION_HANDLER': 'utils.exceptions.custom_exception_handler'
+    "EXCEPTION_HANDLER": "utils.exceptions.custom_exception_handler",
 }
 
 LOGGING = {
     "version": 1,
-    'handlers': {
-      'logstash': {
-          'level': 'DEBUG',
-          'class': 'logstash.LogstashHandler',
-          'host': 'logstash',
-          'port': 5000,
-          'version': 1, # Version of logstash event schema. Default value: 0 (for backward compatibility of the library)
-          'message_type': 'logstash',  # 'type' field in logstash message. Default value: 'logstash'.
-          'fqdn': False, # Fully qualified domain name. Default value: false.
-        #   'tags': ['tag1', 'tag2'], # list of tags. Default: None.
-      },
-  },
-  'loggers': {
-      'django.request': {
-          'handlers': ['logstash'],
-          'level': 'DEBUG',
-          'propagate': True,
-      },
-      'logstash-logger': {
-          'handlers': ['logstash'],
-          'level': 'INFO',
-          'propagate': True,
-      },
-  },
+    "handlers": {
+        "logstash": {
+            "level": "DEBUG",
+            "class": "logstash.LogstashHandler",
+            "host": "logstash",
+            "port": 5000,
+            "version": 1,  # Version of logstash event schema. Default value: 0 (for backward compatibility of the library)
+            "message_type": "logstash",  # 'type' field in logstash message. Default value: 'logstash'.
+            "fqdn": False,  # Fully qualified domain name. Default value: false.
+            #   'tags': ['tag1', 'tag2'], # list of tags. Default: None.
+        },
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["logstash"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "logstash-logger": {
+            "handlers": ["logstash"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
 }
 
 # Internationalization

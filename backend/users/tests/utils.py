@@ -11,7 +11,6 @@ class UserFactory(factory.django.DjangoModelFactory):
     password = factory.LazyFunction(lambda: make_password("test"))
 
 
-
 class ContactFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Contact

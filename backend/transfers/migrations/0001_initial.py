@@ -7,22 +7,27 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Transfer',
+            name="Transfer",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('date_changed', models.DateTimeField(auto_now=True)),
-                ('is_archived', models.BooleanField(default=False)),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('pending', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date_created", models.DateTimeField(auto_now_add=True)),
+                ("date_changed", models.DateTimeField(auto_now=True)),
+                ("is_archived", models.BooleanField(default=False)),
+                ("amount", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("pending", models.BooleanField(default=True)),
             ],
-            options={
-                'abstract': False,
-            },
+            options={"abstract": False,},
         ),
     ]
