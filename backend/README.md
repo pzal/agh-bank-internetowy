@@ -53,6 +53,10 @@ docker stack deploy -c docker-stack.yml iksde-bank
 ```bash
 watch docker stack ps iksde-bank
 ```
+* See api logs:
+```bash
+docker service logs iksde-bank_api --follow
+```
 * Remove the stack:
 ```bash
 docker stack rm iksde-bank
