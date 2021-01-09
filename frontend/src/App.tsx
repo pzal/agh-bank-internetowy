@@ -1,8 +1,6 @@
 import React, {useState} from 'react'
-import axios from 'axios'
-import {Switch, Route, Link, Redirect} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Appbar from './components/Appbar'
-import {useAsync} from 'react-async'
 import {makeStyles} from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -64,7 +62,7 @@ function App() {
   const apiKey = useCookie(API_KEY_COOKIE)
   const classes = useStyles()
 
-  const {data, error, isPending, isRejected, run} = useApiGet(
+  const {data, error, isRejected, run} = useApiGet(
     `${process.env.REACT_APP_API_URL}/users/me/`,
     // Deferred so that we don't fire again
     // when we get `apiKey` for the first time.

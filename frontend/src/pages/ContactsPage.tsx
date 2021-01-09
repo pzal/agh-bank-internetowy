@@ -21,7 +21,7 @@ const ListWrapper = styled.div`
 `
 
 export default function ContactsPage() {
-  const {data: response, isPending} = useApiGet(
+  const {data: response} = useApiGet(
     `${process.env.REACT_APP_API_URL}/users/contacts/`,
   )
 
