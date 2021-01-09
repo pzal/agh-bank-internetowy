@@ -1,5 +1,4 @@
-Development environment setup:
---
+# Development environment setup:
 
 * Install docker
 * Install python3.8
@@ -24,4 +23,37 @@ pip install -r ./requirements-dev.txt
 * Create shared docker network:
 ```bash
 docker network create shared-network
+```
+
+
+# Docker swarm deploy:
+
+* Build frontend:
+```bash
+cd ../frontend
+yarn build
+```
+* Build docker images:
+```bash
+make rebuild
+```
+* Create swarm:
+```bash
+docker swarm init
+```
+* Deploy service:
+```bash
+docker stack deploy -c docker-stack.yml iksde-bank
+```
+
+
+# Docker swarm stack management:
+
+* Monitor the stack:
+```bash
+watch docker stack ps iksde-bank
+```
+* Remove the stack:
+```bash
+docker stack rm iksde-bank
 ```

@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   api:
-    image: server:latest
+    image: iksde-bank-server:latest
     build:
       context: .
       dockerfile: $PWD/Dockerfile
@@ -21,7 +21,7 @@ services:
       - celery
       - beat
   celery:
-    image: server:latest
+    image: iksde-bank-server:latest
     build:
       context: .
       dockerfile: $PWD/Dockerfile
@@ -34,7 +34,7 @@ services:
       - postgres
       - redis
   celery-transfers:
-    image: server:latest
+    image: iksde-bank-server:latest
     build:
       context: .
       dockerfile: $PWD/Dockerfile
@@ -47,7 +47,7 @@ services:
       - postgres
       - redis
   beat:
-    image: server:latest
+    image: iksde-bank-server:latest
     build:
       context: .
       dockerfile: $PWD/Dockerfile
