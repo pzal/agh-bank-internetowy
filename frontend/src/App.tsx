@@ -107,9 +107,6 @@ function App() {
   }, [isRejected])
 
   if (authState === AUTH_STATE.UNSURE) {
-    // return (
-    //   <div>TODO loading</div>
-    // )
     return (
       null
     )

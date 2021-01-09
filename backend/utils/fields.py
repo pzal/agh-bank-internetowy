@@ -2,7 +2,6 @@ from django.db import models
 import random
 
 
-# TODO provide more colors
 NICE_COLORS = [
     "#1BC5BD",
     "#3699FF",

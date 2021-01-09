@@ -7,7 +7,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
 
-    email = factory.Sequence(lambda n: "doe%03d@example.com" % n)
+    email = factory.Sequence(lambda n: "doe%d@example.com" % n)
     password = factory.LazyFunction(lambda: make_password("test"))
 
 
