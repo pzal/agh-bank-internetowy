@@ -91,7 +91,11 @@ CELERY_BEAT_SCHEDULE = {
     },
     "transfer_settling_task": {
         "task": "transfers.tasks.settle_transfers_task",
-        "schedule": 60,
+        "schedule": 30,
+    },
+    "generate_confirmations_task": {
+        "task": "transfers.tasks.generate_confirmations_task",
+        "schedule": 30,
     },
 }
 

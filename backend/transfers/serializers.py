@@ -1,8 +1,17 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from transfers.models import Transfer
+from transfers.models import Transfer, TransferConfirmation
 from users.serializers import ContactSerializer, UserSerializer, AccountSerializer
 from users.models import Contact
+
+
+class TransferConfirmationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransferConfirmation
+        fields = [
+            "id",
+            "file",
+        ]
 
 
 class TransferSerializer(serializers.ModelSerializer):
@@ -25,6 +34,7 @@ class FullTransferSerializer(serializers.ModelSerializer):
     recipient = ContactSerializer(required=False)
     sender_user = UserSerializer(required=False)
     sender_account = AccountSerializer(required=False)
+    transferconfirmation = TransferConfirmationSerializer(required=False)
 
     class Meta:
         model = Transfer
@@ -39,4 +49,5 @@ class FullTransferSerializer(serializers.ModelSerializer):
             "pending",
             "date_created",
             "date_confirmed",
+            "transferconfirmation",
         ]

@@ -1,18 +1,9 @@
 import React, {Fragment} from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import TextField from '@material-ui/core/TextField'
-import SaveIcon from '@material-ui/icons/Save'
-import Alert from '@material-ui/lab/Alert'
-import IconButton from '@material-ui/core/IconButton'
-import Collapse from '@material-ui/core/Collapse'
-import CloseIcon from '@material-ui/icons/Close'
 import DownloadIcon from '@material-ui/icons/GetApp'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogTitle from '@material-ui/core/DialogTitle'
 import styled from 'styled-components'
-import {apiPatch, apiDelete, useApiGet} from '../utils/api'
+import {useApiGet} from '../utils/api'
 import {useParams, useHistory, Redirect} from 'react-router-dom'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {DateTime} from 'luxon'
@@ -52,6 +43,11 @@ interface Contact {
   account_number: string
 }
 
+interface TransferConfirmation {
+  id: any
+  file?: string
+}
+
 interface Transfer {
   id: any
   sender_user: User
@@ -63,6 +59,7 @@ interface Transfer {
   date_created: string
   frozen_account_number?: string
   date_confirmed?: string
+  transferconfirmation?: TransferConfirmation
 }
 
 export default function TransferDetailsPage() {
@@ -123,17 +120,24 @@ export default function TransferDetailsPage() {
               DateTime.fromISO(data.date_confirmed).toFormat(DATETIME_FORMAT)}
           </Grid>
 
-          <Grid item>
-            <Button
-              onClick={() => {}}
-              variant="contained"
-              color="primary"
-              size="large"
-              startIcon={<DownloadIcon />}
-            >
-              Pobierz potwierdzenie
-            </Button>
-          </Grid>
+          {data?.transferconfirmation?.file && (
+            <Grid item>
+              <a
+                download="confirmation.pdf"
+                target="_blank"
+                href={data?.transferconfirmation.file}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  startIcon={<DownloadIcon />}
+                >
+                  Pobierz potwierdzenie
+                </Button>
+              </a>
+            </Grid>
+          )}
         </Grid>
       </ContentWrapper>
     </Fragment>

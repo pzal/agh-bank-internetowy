@@ -1,3 +1,4 @@
+import secrets
 from django.db import models
 from django.contrib.auth.models import (
     AbstractUser,
@@ -17,9 +18,7 @@ class Transfer(BaseModel):
         on_delete=models.CASCADE,
     )
     sender_account = models.ForeignKey(
-        "users.Account",
-        blank=False,
-        on_delete=models.CASCADE,
+        "users.Account", blank=False, on_delete=models.CASCADE,
     )
     recipient_user = models.ForeignKey(
         "users.User",
@@ -39,3 +38,13 @@ class Transfer(BaseModel):
     frozen_account_number = models.TextField(blank=True, null=True, default=None)
 
     objects = BaseModelManager.from_queryset(TransferQuerySet)()
+
+
+def get_private_upload_path(instance, filename):
+    token = secrets.token_urlsafe()
+    return f"priv/f/{token}/{filename}"
+
+
+class TransferConfirmation(BaseModel):
+    transfer = models.OneToOneField("transfers.Transfer", on_delete=models.CASCADE)
+    file = models.FileField(upload_to=get_private_upload_path, blank=True)

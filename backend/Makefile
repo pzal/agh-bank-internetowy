@@ -1,5 +1,6 @@
 setup:
 	docker-compose run api python manage.py migrate
+	docker-compose run api python manage.py collectstatic --clear --no-input
 	docker-compose run api python manage.py populate_with_development_data
 
 resetup:
@@ -21,6 +22,8 @@ migrate:
 
 clean:
 	docker-compose down -v
+	rm -rf uploads || true
+	rm -rf static || true
 	rm celerybeat-schedule || true
 	rm celerybeat.pid || true
 
