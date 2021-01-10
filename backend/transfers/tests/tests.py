@@ -2,7 +2,7 @@ import json
 from django.test import TestCase
 from users.models import User
 from rest_framework.authtoken.models import Token
-from users.tests.utils import UserFactory, ContactFactory
+from users.tests.utils import UserFactory, ContactFactory, AccountFactory
 from transfers.tests.utils import TransferFactory
 from transfers.models import Transfer
 from django.test import Client
@@ -11,11 +11,17 @@ from rest_framework.test import APIClient
 
 class TransferTestCase(TestCase):
     def setUp(self):
-        self.user = UserFactory.create()
+        self.user_account = AccountFactory.create()
+        self.user = self.user_account.user
         self.contact = ContactFactory.create(user=self.user)
 
     def test_transfer_pending_by_default(self):
-        t = Transfer.objects.create(user=self.user, recipient=self.contact, amount=100)
+        t = Transfer.objects.create(
+            sender_user=self.user,
+            sender_account=self.user_account,
+            recipient=self.contact,
+            amount=100,
+        )
         self.assertTrue(t.pending)
 
 
