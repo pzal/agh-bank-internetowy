@@ -8,7 +8,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
     email = factory.Sequence(lambda n: "doe%d@example.com" % n)
-    password = factory.LazyFunction(lambda: make_password("test"))
+    password = factory.LazyFunction(lambda: make_password("secret"))
 
 
 class ContactFactory(factory.django.DjangoModelFactory):

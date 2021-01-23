@@ -40,6 +40,9 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 class Account(BaseModel):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
 
+    balance = models.DecimalField(
+        max_digits=16, decimal_places=2, blank=False, null=False, default=0.0
+    )
     account_number = models.TextField(blank=False, null=False)
 
     objects = BaseModelManager.from_queryset(AccountQuerySet)()

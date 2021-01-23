@@ -26,6 +26,7 @@ class TransferSerializer(serializers.ModelSerializer):
             "amount",
             "frozen_account_number",
             "pending",
+            "failed",
         ]
         read_only_fields = ("id", "user")
 
@@ -50,4 +51,5 @@ class FullTransferSerializer(serializers.ModelSerializer):
             "date_created",
             "date_confirmed",
             "transferconfirmation",
+            "failed",
         ]

@@ -27,6 +27,13 @@ class Transfer(BaseModel):
         related_name="transfers_received",
         on_delete=models.CASCADE,
     )
+    recipient_account = models.ForeignKey(
+        "users.Account",
+        blank=True,
+        null=True,
+        related_name="transfers_received",
+        on_delete=models.CASCADE,
+    )
     recipient = models.ForeignKey("users.Contact", on_delete=models.CASCADE)
 
     title = models.TextField(blank=False)
@@ -34,6 +41,7 @@ class Transfer(BaseModel):
         max_digits=10, decimal_places=2, blank=False, null=False
     )
     pending = models.BooleanField(default=True)
+    failed = models.BooleanField(default=False)
     date_confirmed = models.DateTimeField(blank=True, null=True, default=None)
     frozen_account_number = models.TextField(blank=True, null=True, default=None)
 

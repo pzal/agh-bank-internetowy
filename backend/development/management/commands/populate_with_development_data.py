@@ -18,9 +18,9 @@ class Command(BaseCommand):
                 # last_name="Admin",
                 password="secret",
             )
-            account = AccountFactory.create(user=admin)
+            account = AccountFactory.create(user=admin, balance=1000000)
 
-        recipient_accounts = AccountFactory.create_batch(10)
+        recipient_accounts = AccountFactory.create_batch(10, balance=1000000)
         contacts = ContactFactory.create_batch(
             10,
             user=admin,

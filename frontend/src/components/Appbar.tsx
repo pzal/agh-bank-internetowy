@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import {SIDEBAR_WIDTH} from '../App'
 import styled from 'styled-components'
-import {setApiKeyInCookie} from '../utils/cookies'
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -27,11 +26,6 @@ const ToolbarContent = styled.div`
 export default function Appbar() {
   const classes = useStyles()
 
-  const logout = () => {
-    console.log('logging out')
-    setApiKeyInCookie(undefined)
-  }
-
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
@@ -47,7 +41,6 @@ export default function Appbar() {
               <Route path="/contacts/:contactId">Edycja kontaktu</Route>
             </Switch>
           </Typography>
-          <Button onClick={logout} color="default">wyloguj</Button>
         </ToolbarContent>
       </Toolbar>
     </AppBar>

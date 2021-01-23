@@ -54,6 +54,7 @@ interface Transfer {
   pending: boolean
   frozen_account_number?: string
   date_confirmed?: string
+  failed: boolean
 }
 
 const useStyles = makeStyles(theme => ({
@@ -80,6 +81,21 @@ interface TransferProps {
   me: User
 }
 
+interface TransferWrapperProps {
+  failed: boolean
+}
+
+const TransferWrapper = styled.div<TransferWrapperProps>`
+  ${props =>
+    props.failed &&
+    `
+    > * {
+        text-decoration: line-through;
+      color: grey !important;
+    }
+  `}
+`
+
 function Transfer({transfer, me}: TransferProps) {
   const classes = useStyles()
 
@@ -92,37 +108,40 @@ function Transfer({transfer, me}: TransferProps) {
           {outgoing ? <ArrowForwardIcon /> : <ArrowDownwardIcon />}
         </Avatar>
       </ListItemAvatar>
-      <ListItemText
-        primary={`Przelew ${outgoing ? 'wychodzący:' : 'przychodzący'} ${
-          outgoing ? transfer.recipient.name : ''
-        }`}
-        secondary={
-          <React.Fragment>
-            <Typography
-              component="span"
-              variant="body2"
-              className={classes.title}
-              color="textPrimary"
-            >
-              {transfer.title}
-            </Typography>
-            <Typography
-              component="span"
-              variant="body2"
-              className={
-                outgoing ? classes.inlineOutgoing : classes.inlineIncoming
-              }
-              color="textPrimary"
-            >
-              {`${outgoing ? '-' : '+'}${transfer.amount}`}
-            </Typography>
-            {transfer.date_confirmed &&
-              ` — Zrealizowany ${DateTime.fromISO(
-                transfer.date_confirmed,
-              ).toFormat(DATETIME_FORMAT)}`}
-          </React.Fragment>
-        }
-      />
+      <TransferWrapper failed={transfer.failed}>
+        <ListItemText
+          primary={`Przelew ${outgoing ? 'wychodzący:' : 'przychodzący'} ${
+            outgoing ? transfer.recipient.name : ''
+          }`}
+          secondary={
+            <React.Fragment>
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.title}
+                color="textPrimary"
+              >
+                {transfer.title}
+              </Typography>
+              <Typography
+                component="span"
+                variant="body2"
+                className={
+                  outgoing ? classes.inlineOutgoing : classes.inlineIncoming
+                }
+                color="textPrimary"
+              >
+                {`${outgoing ? '-' : '+'}${transfer.amount}`}
+              </Typography>
+              {transfer.date_confirmed &&
+                !transfer.failed &&
+                ` — Zrealizowany ${DateTime.fromISO(
+                  transfer.date_confirmed,
+                ).toFormat(DATETIME_FORMAT)}`}
+            </React.Fragment>
+          }
+        />
+      </TransferWrapper>
       {transfer.date_confirmed && (
         <ListItemSecondaryAction>
           <Link to={`/transfers/${transfer.id}`}>

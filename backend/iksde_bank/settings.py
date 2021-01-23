@@ -163,6 +163,8 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "utils.exceptions.custom_exception_handler",
 }
 
+ELK_STACK_ON = os.environ["ELK_STACK_ON"] == "true"
+
 LOGGING = {
     "version": 1,
     "handlers": {
@@ -175,7 +177,9 @@ LOGGING = {
             "message_type": "logstash",  # 'type' field in logstash message. Default value: 'logstash'.
             "fqdn": False,  # Fully qualified domain name. Default value: false.
             #   'tags': ['tag1', 'tag2'], # list of tags. Default: None.
-        },
+        }
+        if ELK_STACK_ON
+        else {"level": "DEBUG", "class": "logging.StreamHandler",},
     },
     "loggers": {
         "django.request": {

@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from users.utils import AuthUserSerializer
 from utils.logging import log, error
 from users.models import User, Contact
-from users.serializers import UserSerializer, ContactSerializer
+from users.serializers import UserSerializer, ContactSerializer, MeSerializer
 
 
 class AuthTokenView(ObtainAuthToken):
@@ -34,7 +34,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if not user or user.is_anonymous:
             return Response({"error": "Not authorized"}, status=401)
 
-        serializer = UserSerializer(user)
+        serializer = MeSerializer(user)
         return Response(serializer.data)
 
 

@@ -60,6 +60,7 @@ interface Transfer {
   frozen_account_number?: string
   date_confirmed?: string
   transferconfirmation?: TransferConfirmation
+  failed: boolean
 }
 
 export default function TransferDetailsPage() {
@@ -81,6 +82,17 @@ export default function TransferDetailsPage() {
   }
 
   const outgoing = me?.id === data?.sender_user.id
+  const getStatus = () => {
+    if (data?.pending) {
+      return 'Oczekujący'
+    }
+
+    if (data?.failed) {
+      return 'Nieudany'
+    }
+
+    return 'Zrealizowany'
+  }
 
   return (
     <Fragment>
@@ -118,6 +130,15 @@ export default function TransferDetailsPage() {
           <Grid item>
             {data?.date_confirmed &&
               DateTime.fromISO(data.date_confirmed).toFormat(DATETIME_FORMAT)}
+          </Grid>
+
+          <Grid item>
+            <LabelWrapper>Status</LabelWrapper>
+          </Grid>
+          <Grid item>
+            <span style={{color: getStatus() === 'Nieudany' ? 'red' : undefined}}>
+              {getStatus()}
+            </span>
           </Grid>
 
           {data?.transferconfirmation?.file && (

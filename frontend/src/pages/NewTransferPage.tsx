@@ -55,7 +55,7 @@ export default function NewTransferPage() {
       amount,
       title,
       sender_user: me?.id,
-      sender_account: me?.account_set[0],
+      sender_account: me?.account_set[0].id,
     })
       .then(res => {
         console.log('res', res)

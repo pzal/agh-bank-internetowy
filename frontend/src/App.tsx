@@ -11,6 +11,7 @@ import PageRoutes from './components/PageRoutes'
 import LoginPage from './pages/LoginPage'
 import {useCookie, API_KEY_COOKIE, setApiKeyInCookie} from './utils/cookies'
 import {useApiGet} from './utils/api'
+import UserDetails from './components/UserDetails'
 
 const BrandName = styled.div`
   display: flex;
@@ -41,6 +42,9 @@ const useStyles = makeStyles(theme => ({
   },
   drawerPaper: {
     width: SIDEBAR_WIDTH,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
@@ -90,7 +94,7 @@ function App() {
 
   React.useEffect(() => {
     console.log('got data', data, error, isRejected)
-    
+
     // If some response, check if it actually returned any client.
     if (data) {
       authState !== AUTH_STATE.LOGGED_IN && setAuthState(AUTH_STATE.LOGGED_IN)
@@ -107,9 +111,7 @@ function App() {
   }, [isRejected])
 
   if (authState === AUTH_STATE.UNSURE) {
-    return (
-      null
-    )
+    return null
   }
 
   if (authState !== AUTH_STATE.LOGGED_IN) {
@@ -127,11 +129,16 @@ function App() {
         }}
         anchor="left"
       >
-        <BrandName className={classes.toolbar}>
-          <Link to="/home">Bank</Link>
-        </BrandName>
-        <Divider />
-        <NavigationLinks />
+        <div>
+          <BrandName className={classes.toolbar}>
+            <Link to="/home">Bank</Link>
+          </BrandName>
+          <Divider />
+          <NavigationLinks />
+        </div>
+        <div>
+          <UserDetails />
+        </div>
       </Drawer>
       <Appbar />
       <main className={classes.content}>

@@ -9,11 +9,7 @@ from users.actions import (
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [
-            "id",
-            "email",
-            "account_set"
-        ]
+        fields = ["id", "email", "account_set"]
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -22,8 +18,17 @@ class AccountSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user",
+            "balance",
             "account_number",
         ]
+
+
+class MeSerializer(serializers.ModelSerializer):
+    account_set = AccountSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = ["id", "email", "account_set"]
 
 
 class ContactSerializer(serializers.ModelSerializer):

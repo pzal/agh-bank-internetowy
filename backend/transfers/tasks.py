@@ -2,23 +2,50 @@ import secrets
 from django.utils import timezone
 from iksde_bank.celery import app as celery
 from transfers.models import Transfer, TransferConfirmation, get_private_upload_path
+from users.models import Account
 from utils.logging import log, error
 from transfers.utils import get_transfer_confirmation_html_content
 import pdfkit
 from django.core.files import File
+from django.db import transaction
 
 
 @celery.task()
 def settle_transfers_task():
     log("Running transfer settling…")
 
+    def is_valid(transfer):
+        if t.sender_account.balance - t.amount < 0:
+            return False
+
+        if not Account.objects.filter(
+            account_number=t.recipient.account_number
+        ).exists():
+            return False
+
+        return True
+
     for t in Transfer.objects.for_settling():
-        # TODO implement, assign recipient_user
-        log("Stub transfer settling", {"pk": t.pk})
-        t.pending = False
-        t.frozen_account_number = t.recipient.account_number
-        t.date_confirmed = timezone.now()
-        t.save()
+        with transaction.atomic():
+            # TODO implement, assign recipient_user
+            log("Transfer settling", {"pk": t.pk})
+            if not is_valid(t):
+                t.failed = True
+            else:
+                recipient_account = Account.objects.filter(
+                    account_number=t.recipient.account_number
+                ).first()
+                t.recipient_account = recipient_account
+                t.recipient_user = recipient_account.user
+                t.sender_account.balance -= t.amount
+                t.sender_account.save()
+                t.recipient_account.balance += t.amount
+                t.recipient_account.save()
+
+            t.date_confirmed = timezone.now()
+            t.pending = False
+            t.frozen_account_number = t.recipient.account_number
+            t.save()
 
 
 @celery.task()
