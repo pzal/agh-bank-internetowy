@@ -10,3 +10,7 @@ def log(msg, extra=None):
 
 def error(msg, extra=None):
     logger.error(msg, extra=extra)
+
+
+def exception(msg, exc_info, extra=None):
+    logger.exception(msg, extra=extra, exc_info=exc_info)

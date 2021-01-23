@@ -1,4 +1,4 @@
-{% load inlinecss %} {% inlinecss "transfers/styling.css" %}
+{% comment %} {% load inlinecss %} {% inlinecss "transfers/styling.css" %} {% endcomment %}
 
 <!DOCTYPE html>
 <html>
@@ -48,6 +48,9 @@
         }
       }
     </style>
+    .preheader {
+      margin-bottom: 20px;
+    }
     {% endcomment %}
   </head>
   <body class="">
@@ -94,4 +97,4 @@
     </table>
   </body>
 </html>
-{% endinlinecss %}
+{% comment %} {% endinlinecss %} {% endcomment %}
